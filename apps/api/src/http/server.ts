@@ -12,7 +12,10 @@ import {
 } from 'fastify-type-provider-zod'
 
 import { errorHandler } from './error-handler'
+import { authenticateWithPassword } from './routes/auth/authenticate-with-password'
 import { createAccount } from './routes/auth/create-account'
+import { requestPasswordRecover } from './routes/auth/request-password-recover'
+import { resetPassword } from './routes/auth/reset-password'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -24,8 +27,8 @@ app.setErrorHandler(errorHandler)
 app.register(fastifySwagger, {
   openapi: {
     info: {
-      title: 'Next SaaS RBAC',
-      description: 'Full-Stack SaaS app with multi-tenant & RBAC',
+      title: 'Trust and Rise API',
+      description: 'API para Trust and Rise',
       version: '1.0.0',
     },
     components: {
@@ -53,6 +56,9 @@ app.register(fastifyCors)
 
 // auth routes
 app.register(createAccount)
+app.register(authenticateWithPassword)
+app.register(requestPasswordRecover)
+app.register(resetPassword)
 
 app.listen({ port: env.SERVER_PORT }).then(() => {
   console.log(`Server listening on http://localhost:${env.SERVER_PORT}`)

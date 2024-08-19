@@ -32,11 +32,11 @@ export async function createAccount(app: FastifyInstance) {
     async (req, res) => {
       const { name, email, username, telephone, birthdate, password } = req.body
 
-      const userExists = await prisma.user.findMany({
+      const userExists = await prisma.user.findFirst({
         where: { OR: [{ email }, { username }] },
       })
 
-      if (userExists.length > 0) {
+      if (userExists) {
         throw new BadRequestError(
           'Usuário já existe com esse email ou nome de usuário',
         )
